@@ -59,6 +59,16 @@ static Future<int> deleteTransaction(int id)async{
   return await db.delete(tableTransaction,where: 'id=?',whereArgs: [id]);
 }
 
+// UPDATE
+  static Future<int> updateTransaction(TransactionModel model) async {
+    final db = await database;
 
+    return await db.update(
+      tableTransaction,
+      model.toMap(),
+      where: 'id = ?',
+      whereArgs: [model.id],
+    );
+  }
 
 }

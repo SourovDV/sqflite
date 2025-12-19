@@ -1,36 +1,69 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:sqflite_demo/data/user_data_model.dart';
 import 'package:sqflite_demo/feature/screen/home/home_controller.dart';
-
-import '../../../data/user_data_model.dart';
 
 class AddItemController extends GetxController {
   final HomeController homeController = Get.find<HomeController>();
 
-  final addKey = GlobalKey<FormState>();
+  final key = GlobalKey<FormState>();
+
   TextEditingController amountController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   TextEditingController noteController = TextEditingController();
   TextEditingController dateController = TextEditingController();
 
-  String? checkValidation(value) {
+  TransactionModel? editModel; // 🔥 ADD THIS
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    // 🔥 EDIT MODE CHECK
+    if (Get.arguments != null && Get.arguments is TransactionModel) {
+      editModel = Get.arguments;
+      amountController.text = editModel!.amount;
+      categoryController.text = editModel!.income;
+      noteController.text = editModel!.note;
+      dateController.text = editModel!.date;
+    }
+  }
+
+  String? checkValidation(String? value) {
     if (value == null || value.isEmpty) {
-      return "Required";
+      return "This field is required";
     }
     return null;
   }
 
-  void addData() {
-    if (addKey.currentState!.validate()) {
-      final model = TransactionModel(
-        income: categoryController.text,
-        amount: amountController.text,
-        note: noteController.text,
-        date: DateTime.now().toIso8601String(),
-      );
+  void saveItem() {
+    if (!key.currentState!.validate()) return;
 
-      homeController.addTransaction(model); // 🔥 MAIN LINE
-      Get.back(); // back to HomeView
+    final model = TransactionModel(
+      id: editModel?.id, // 🔥 id থাকলে UPDATE
+      income: categoryController.text,
+      amount: amountController.text,
+      note: noteController.text,
+      date: dateController.text,
+    );
+
+    if (editModel == null) {
+      // ➕ ADD
+      homeController.insertTransaction(model);
+    } else {
+      // ✏️ UPDATE
+      homeController.updateTransaction(model);
     }
+
+    Get.back();
+  }
+
+  @override
+  void onClose() {
+    amountController.dispose();
+    categoryController.dispose();
+    noteController.dispose();
+    dateController.dispose();
+    super.onClose();
   }
 }

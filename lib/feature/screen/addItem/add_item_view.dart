@@ -13,7 +13,7 @@ class AddItemView extends GetView<AddItemController> {
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Form(
-          key:controller.addKey,
+          key: controller.key,
           child: Column(
             children: [
               Text(
@@ -29,7 +29,6 @@ class AddItemView extends GetView<AddItemController> {
                     borderSide: BorderSide(),
                   ),
                 ),
-
                 controller: controller.amountController,
                 validator: controller.checkValidation,
               ),
@@ -54,8 +53,8 @@ class AddItemView extends GetView<AddItemController> {
                     borderSide: BorderSide(),
                   ),
                 ),
-                validator: controller.checkValidation,
                 controller: controller.noteController,
+                validator: controller.checkValidation,
               ),
               SizedBox(height: 10),
               TextFormField(
@@ -72,7 +71,7 @@ class AddItemView extends GetView<AddItemController> {
               SizedBox(height: 20),
               InkWell(
                 onTap: (){
-                  controller.addData();
+                    controller.saveItem();
                 },
                 child: Container(
                   height: 50,
