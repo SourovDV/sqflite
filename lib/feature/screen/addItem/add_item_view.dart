@@ -58,14 +58,18 @@ class AddItemView extends GetView<AddItemController> {
               ),
               SizedBox(height: 10),
               TextFormField(
+                controller: controller.dateController,
+                readOnly: true, // কিবোর্ড আসবে না
                 decoration: InputDecoration(
                   labelText: "Date",
+                  prefixIcon: Icon(Icons.calendar_today), // ক্যালেন্ডার আইকন
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(),
                   ),
                 ),
-                controller: controller.dateController,
+                onTap: () {
+                  controller.selectDate(context); // ক্লিক করলে ক্যালেন্ডার খুলবে
+                },
                 validator: controller.checkValidation,
               ),
               SizedBox(height: 20),

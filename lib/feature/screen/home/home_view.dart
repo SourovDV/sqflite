@@ -31,7 +31,7 @@ class HomeView extends GetView<HomeController> {
                   controller.deleteTransaction(item.id!);
                 }
               },
-              child: Text(item.amount)),
+              child: Text(item.date)),
           subtitle: Text(item.income),
           trailing: InkWell(
               onTap: (){
